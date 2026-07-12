@@ -9,7 +9,7 @@ class BeerController {
 
     @PostMapping(value = "/check", consumes = "application/json", produces = "application/json")
     Response check(@RequestBody PersonToCheck personToCheck) {
-        return personToCheck.age >= 18
+        return personToCheck.age() >= 18
                 ? new Response(BeerCheckStatus.OK)
                 : new Response(BeerCheckStatus.NOT_OK);
     }
