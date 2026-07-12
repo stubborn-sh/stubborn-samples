@@ -15,6 +15,7 @@ jobs:
       matrix:
         sample:
           - sample-http
+          - sample-messaging
 
     steps:
       - uses: actions/checkout@v4
