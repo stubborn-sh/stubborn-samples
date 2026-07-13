@@ -16,6 +16,7 @@ jobs:
         sample:
           - sample-http
           - sample-messaging
+          - sample-kafka
 
     steps:
       - uses: actions/checkout@v4
