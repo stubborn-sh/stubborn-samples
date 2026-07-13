@@ -136,3 +136,42 @@ jobs:
           path: '${{ matrix.sample }}/**/build/test-results/test/TEST-*.xml'
           reporter: java-junit
           fail-on-error: false
+
+  build-compatibility:
+    name: Compatibility (SCC ↔ Stubborn)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: SCC producer → install stubs
+        working-directory: sample-compatibility/scc-to-stubborn/producer
+        run: ./mvnw clean install --no-transfer-progress
+
+      - name: Stubborn consumer ← SCC stubs
+        working-directory: sample-compatibility/scc-to-stubborn/consumer
+        run: ./mvnw test --no-transfer-progress
+
+      - name: Stubborn producer → install stubs
+        working-directory: sample-compatibility/stubborn-to-scc/producer
+        run: ./mvnw clean install --no-transfer-progress
+
+      - name: SCC consumer ← Stubborn stubs
+        working-directory: sample-compatibility/stubborn-to-scc/consumer
+        run: ./mvnw test --no-transfer-progress
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Compatibility Test Results
+          path: 'sample-compatibility/**/target/surefire-reports/TEST-*.xml'
+          reporter: java-junit
+          fail-on-error: false

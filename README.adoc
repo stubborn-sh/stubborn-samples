@@ -51,6 +51,9 @@ toc::[]
 |link:sample-grpc[sample-grpc]
 |gRPC contracts with Protobuf and Spring Boot 4.1 native gRPC support
 
+|link:sample-compatibility[sample-compatibility]
+|SCC ↔ Stubborn interoperability: SCC stubs consumed by Stubborn runner and vice versa
+
 |===
 
 == Building

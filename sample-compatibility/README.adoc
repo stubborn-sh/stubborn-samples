@@ -1,0 +1,35 @@
+= Sample: SCC ↔ Stubborn Compatibility
+
+Demonstrates that Spring Cloud Contract stubs and Stubborn Contract stubs
+are interchangeable — the WireMock stub format is the same.
+
+== Two scenarios
+
+=== scc-to-stubborn
+
+Producer built with *Spring Cloud Contract 4.x* (Spring Boot 3.4.5).
+Consumer uses *Stubborn Contract* stub runner (Spring Boot 4.1.0) to
+load and serve the SCC-generated stubs.
+
+----
+cd scc-to-stubborn/producer && ./mvnw clean install   # SCC generates stubs
+cd scc-to-stubborn/consumer && ./mvnw test            # Stubborn runner loads them
+----
+
+=== stubborn-to-scc
+
+Producer built with *Stubborn Contract 0.1.0-SNAPSHOT* (Spring Boot 4.1.0).
+Consumer uses *Spring Cloud Contract* stub runner (Spring Boot 3.4.5) to
+load and serve the Stubborn-generated stubs.
+
+----
+cd stubborn-to-scc/producer && ./mvnw clean install   # Stubborn generates stubs
+cd stubborn-to-scc/consumer && ./mvnw test            # SCC runner loads them
+----
+
+== Why this works
+
+Both SCC and Stubborn Contract generate plain WireMock JSON stubs.
+The stub runner on either side starts a WireMock server and registers those
+mappings — no framework-specific format is required.
+
