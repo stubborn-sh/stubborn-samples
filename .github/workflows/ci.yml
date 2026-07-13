@@ -24,6 +24,7 @@ jobs:
           - sample-restdocs
           - sample-security
           - sample-wiremock
+          - sample-stubs-per-consumer
 
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +49,16 @@ jobs:
       - name: Build consumer (Maven)
         if: hashFiles(format('{0}/consumer/pom.xml', matrix.sample)) != ''
         working-directory: ${{ matrix.sample }}/consumer
+        run: ./mvnw clean install --no-transfer-progress
+
+      - name: Build consumer-a (Maven)
+        if: hashFiles(format('{0}/consumer-a/pom.xml', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/consumer-a
+        run: ./mvnw clean install --no-transfer-progress
+
+      - name: Build consumer-b (Maven)
+        if: hashFiles(format('{0}/consumer-b/pom.xml', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/consumer-b
         run: ./mvnw clean install --no-transfer-progress
 
       - name: Publish test results
