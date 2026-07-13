@@ -17,6 +17,8 @@ jobs:
           - sample-http
           - sample-messaging
           - sample-kafka
+          - sample-rest-assured
+          - sample-webflux
 
     steps:
       - uses: actions/checkout@v4
