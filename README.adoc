@@ -13,55 +13,65 @@ toc::[]
 |Sample |Description
 
 |link:sample-http[sample-http]
-|REST/HTTP contracts — producer and consumer sides, Maven and Gradle, Groovy/Kotlin/YAML DSL variants
+|Basic REST/HTTP contracts — producer (Maven + Gradle) and consumer sides
 
 |link:sample-messaging[sample-messaging]
-|Messaging contracts — JMS, AMQP/RabbitMQ, Kafka, Apache Camel
+|Messaging contracts via Spring Cloud Stream (RabbitMQ)
 
-|link:sample-grpc[sample-grpc]
-|gRPC and Protobuf contracts
+|link:sample-kafka[sample-kafka]
+|Messaging contracts via Apache Kafka
 
-|link:sample-graphql[sample-graphql]
-|GraphQL contracts
+|link:sample-stream[sample-stream]
+|Spring Cloud Stream with explicit channel configuration
 
-|link:sample-restdocs[sample-restdocs]
-|Spring REST Docs integration — generating contracts from documentation tests
+|link:sample-jms[sample-jms]
+|JMS messaging contracts via Apache Artemis
+
+|link:sample-rest-assured[sample-rest-assured]
+|REST-Assured mode — explicit HTTP calls in generated tests
 
 |link:sample-webflux[sample-webflux]
-|Reactive WebFlux contracts — WebTestClient and WebFlux Security
+|Reactive WebFlux contracts using WebTestClient
 
 |link:sample-security[sample-security]
-|Secured producer and consumer contracts
+|Secured endpoints — Basic Auth producer and consumer
 
-|link:sample-external-contracts[sample-external-contracts]
-|Contracts in external Git repositories, stubs-per-consumer pattern
+|link:sample-restdocs[sample-restdocs]
+|Spring REST Docs integration — generating WireMock stubs from documentation tests
 
 |link:sample-wiremock[sample-wiremock]
-|Standalone WireMock usage, server variants (native, Tomcat, Undertow), SCC↔Stubborn migration
+|Standalone WireMock usage without the Stubborn Contract plugin
 
-|link:sample-migration[sample-migration]
-|Migrating from Spring Cloud Contract 5.x to Stubborn Contract — both directions
+|link:sample-stubs-per-consumer[sample-stubs-per-consumer]
+|Stubs-per-consumer pattern — each consumer gets tailored stubs
+
+|link:sample-graphql[sample-graphql]
+|GraphQL contracts using HTTP with `metadata(verifier.tool=graphql)`
+
+|link:sample-grpc[sample-grpc]
+|gRPC contracts with Protobuf and Spring Boot 4.1 native gRPC support
 
 |===
 
 == Building
 
-Each sample contains both a Maven (`pom.xml`) and Gradle (`build.gradle`) build.
-The source code is shared — only the build descriptor differs.
+Each sample uses Maven.
 
 [source,bash]
 ----
-# Maven
+# Build producer (generates and installs stubs)
+cd sample-http/producer
 ./mvnw clean install
 
-# Gradle
-./gradlew build
+# Build consumer (downloads stubs and runs contract tests)
+cd ../consumer
+./mvnw test
 ----
 
 == Requirements
 
 * Java 17+
-* Maven 3.9+ or Gradle 8+
+* Maven 3.9+
 
 == License
 
