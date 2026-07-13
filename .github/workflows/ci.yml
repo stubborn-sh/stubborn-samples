@@ -7,8 +7,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    name: Build & Test — ${{ matrix.sample }}
+  build-maven:
+    name: Maven — ${{ matrix.sample }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -67,7 +67,72 @@ jobs:
         if: always()
         uses: dorny/test-reporter@v1
         with:
-          name: Test Results — ${{ matrix.sample }}
+          name: Maven Test Results — ${{ matrix.sample }}
           path: '${{ matrix.sample }}/**/target/surefire-reports/TEST-*.xml'
+          reporter: java-junit
+          fail-on-error: false
+
+  build-gradle:
+    name: Gradle — ${{ matrix.sample }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sample:
+          - sample-http
+          - sample-messaging
+          - sample-kafka
+          - sample-rest-assured
+          - sample-webflux
+          - sample-stream
+          - sample-jms
+          - sample-restdocs
+          - sample-security
+          - sample-wiremock
+          - sample-stubs-per-consumer
+          - sample-graphql
+          - sample-grpc
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Build producer (Gradle)
+        if: hashFiles(format('{0}/producer/build.gradle', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/producer
+        run: ./gradlew clean build --no-daemon
+
+      - name: Build standalone module (Gradle)
+        if: hashFiles(format('{0}/build.gradle', matrix.sample)) != '' && hashFiles(format('{0}/producer/build.gradle', matrix.sample)) == ''
+        working-directory: ${{ matrix.sample }}
+        run: ./gradlew clean build --no-daemon
+
+      - name: Build consumer (Gradle)
+        if: hashFiles(format('{0}/consumer/build.gradle', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/consumer
+        run: ./gradlew clean build --no-daemon
+
+      - name: Build consumer-a (Gradle)
+        if: hashFiles(format('{0}/consumer-a/build.gradle', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/consumer-a
+        run: ./gradlew clean build --no-daemon
+
+      - name: Build consumer-b (Gradle)
+        if: hashFiles(format('{0}/consumer-b/build.gradle', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/consumer-b
+        run: ./gradlew clean build --no-daemon
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Gradle Test Results — ${{ matrix.sample }}
+          path: '${{ matrix.sample }}/**/build/test-results/test/TEST-*.xml'
           reporter: java-junit
           fail-on-error: false

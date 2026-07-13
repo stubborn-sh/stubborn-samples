@@ -55,23 +55,31 @@ toc::[]
 
 == Building
 
-Each sample uses Maven.
+Each sample supports both Maven and Gradle.
 
 [source,bash]
 ----
-# Build producer (generates and installs stubs)
+# Maven: Build producer (generates and installs stubs)
 cd sample-http/producer
 ./mvnw clean install
 
-# Build consumer (downloads stubs and runs contract tests)
+# Maven: Build consumer (downloads stubs and runs contract tests)
 cd ../consumer
 ./mvnw test
+
+# Gradle: Build producer
+cd sample-http/producer
+./gradlew clean build
+
+# Gradle: Build consumer
+cd ../consumer
+./gradlew clean build
 ----
 
 == Requirements
 
 * Java 17+
-* Maven 3.9+
+* Maven 3.9+ or Gradle 8.13+
 
 == License
 

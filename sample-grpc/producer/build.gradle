@@ -1,0 +1,50 @@
+plugins {
+    id 'org.springframework.boot' version '4.1.0'
+    id 'io.spring.dependency-management' version '1.1.7'
+    id 'sh.stubborn.contract' version '0.1.0-SNAPSHOT'
+    id 'com.google.protobuf' version '0.9.4'
+    id 'java'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+java { sourceCompatibility = JavaVersion.VERSION_17 }
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+    maven { url "https://central.sonatype.com/repository/maven-snapshots/"; mavenContent { snapshotsOnly() } }
+}
+
+ext {
+    grpcVersion = '1.80.0'
+    protobufVersion = '4.30.2'
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-grpc-server'
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    implementation "com.google.protobuf:protobuf-java:${protobufVersion}"
+    implementation 'jakarta.annotation:jakarta.annotation-api'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.boot:spring-boot-starter-grpc-server-test'
+    testImplementation 'sh.stubborn:stubborn-starter-verifier:0.1.0-SNAPSHOT'
+    testImplementation "com.squareup.okhttp3:okhttp:4.12.0"
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:${protobufVersion}" }
+    plugins {
+        grpc { artifact = "io.grpc:protoc-gen-grpc-java:${grpcVersion}" }
+    }
+    generateProtoTasks {
+        all()*.plugins { grpc {} }
+    }
+}
+
+contracts {
+    testFramework = 'JUNIT5'
+    testMode = 'CUSTOM'
+    packageWithBaseClasses = 'com.example'
+}
