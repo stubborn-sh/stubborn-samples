@@ -23,6 +23,7 @@ jobs:
           - sample-jms
           - sample-restdocs
           - sample-security
+          - sample-wiremock
 
     steps:
       - uses: actions/checkout@v4
@@ -35,10 +36,17 @@ jobs:
           cache: maven
 
       - name: Build producer (Maven)
+        if: hashFiles(format('{0}/producer/pom.xml', matrix.sample)) != ''
         working-directory: ${{ matrix.sample }}/producer
         run: ./mvnw clean install --no-transfer-progress
 
+      - name: Build standalone module (Maven)
+        if: hashFiles(format('{0}/pom.xml', matrix.sample)) != '' && hashFiles(format('{0}/producer/pom.xml', matrix.sample)) == ''
+        working-directory: ${{ matrix.sample }}
+        run: ./mvnw clean install --no-transfer-progress
+
       - name: Build consumer (Maven)
+        if: hashFiles(format('{0}/consumer/pom.xml', matrix.sample)) != ''
         working-directory: ${{ matrix.sample }}/consumer
         run: ./mvnw clean install --no-transfer-progress
 
