@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package beer;
+
+option java_package = "com.example";
+option java_outer_classname = "BeerProtos";
+option java_multiple_files = true;
+
+service BeerService {
+  rpc Check(PersonToCheck) returns (Response);
+}
+
+message PersonToCheck {
+  int32 age = 1;
+}
+
+message Response {
+  enum BeerCheckStatus {
+    OK = 0;
+    NOT_OK = 1;
+  }
+  BeerCheckStatus status = 1;
+}

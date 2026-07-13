@@ -26,6 +26,7 @@ jobs:
           - sample-wiremock
           - sample-stubs-per-consumer
           - sample-graphql
+          - sample-grpc
 
     steps:
       - uses: actions/checkout@v4
