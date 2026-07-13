@@ -20,6 +20,7 @@ jobs:
           - sample-rest-assured
           - sample-webflux
           - sample-stream
+          - sample-jms
 
     steps:
       - uses: actions/checkout@v4
