@@ -25,6 +25,7 @@ jobs:
           - sample-security
           - sample-wiremock
           - sample-stubs-per-consumer
+          - sample-graphql
 
     steps:
       - uses: actions/checkout@v4
