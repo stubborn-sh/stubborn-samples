@@ -21,6 +21,7 @@ jobs:
           - sample-webflux
           - sample-stream
           - sample-jms
+          - sample-restdocs
 
     steps:
       - uses: actions/checkout@v4
