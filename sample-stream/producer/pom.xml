@@ -19,7 +19,6 @@
     <properties>
         <java.version>17</java.version>
         <stubborn-contract.version>0.1.0-SNAPSHOT</stubborn-contract.version>
-        <spring-cloud-stream.version>5.0.2</spring-cloud-stream.version>
     </properties>
 
     <dependencyManagement>
@@ -42,7 +41,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream</artifactId>
-            <version>${spring-cloud-stream.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -52,7 +50,6 @@
         <dependency>
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-test-binder</artifactId>
-            <version>${spring-cloud-stream.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
