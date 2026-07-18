@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import sh.stubborn.contract.stubrunner.StubFinder;
 import sh.stubborn.contract.stubrunner.spring.AutoConfigureStubRunner;
-import sh.stubborn.contract.stubrunner.spring.StubRunnerProperties;
+import sh.stubborn.contract.stubrunner.StubsMode;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureStubRunner(
     ids = "com.example:compat-scc-producer:+:stubs",
-    stubsMode = StubRunnerProperties.StubsMode.LOCAL
+    stubsMode = StubsMode.LOCAL
 )
 class SccStubsFromStubbornRunnerTest {
 

@@ -25,6 +25,18 @@
         <os-maven-plugin.version>1.7.1</os-maven-plugin.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>sh.stubborn</groupId>
+                <artifactId>stubborn-dependencies</artifactId>
+                <version>${stubborn-contract.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

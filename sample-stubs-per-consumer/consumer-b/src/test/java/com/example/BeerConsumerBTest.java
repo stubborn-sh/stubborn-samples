@@ -6,14 +6,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import sh.stubborn.contract.stubrunner.StubFinder;
 import sh.stubborn.contract.stubrunner.spring.AutoConfigureStubRunner;
-import sh.stubborn.contract.stubrunner.spring.StubRunnerProperties;
+import sh.stubborn.contract.stubrunner.StubsMode;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureStubRunner(
     ids = "com.example:beer-api-producer-stubs-per-consumer:+:stubs",
-    stubsMode = StubRunnerProperties.StubsMode.LOCAL,
+    stubsMode = StubsMode.LOCAL,
     consumerName = "beer-api-consumer-b"
 )
 class BeerConsumerBTest {

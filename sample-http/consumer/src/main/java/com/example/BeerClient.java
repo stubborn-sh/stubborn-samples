@@ -1,5 +1,7 @@
 package com.example;
 
+import java.util.Map;
+
 import org.springframework.web.client.RestClient;
 
 public class BeerClient {
@@ -10,12 +12,14 @@ public class BeerClient {
         this.restClient = RestClient.builder().baseUrl(baseUrl).build();
     }
 
+    @SuppressWarnings("unchecked")
     public String checkIfAdult(int age) {
-        return restClient.post()
+        Map<String, String> response = restClient.post()
                 .uri("/check")
                 .header("Content-Type", "application/json")
                 .body("{\"age\":" + age + "}")
                 .retrieve()
-                .body(String.class);
+                .body(Map.class);
+        return response != null ? response.get("status") : null;
     }
 }

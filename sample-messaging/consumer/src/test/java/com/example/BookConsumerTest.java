@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import sh.stubborn.contract.stubrunner.spring.AutoConfigureStubRunner;
-import sh.stubborn.contract.stubrunner.spring.StubRunnerProperties;
+import sh.stubborn.contract.stubrunner.StubsMode;
 import sh.stubborn.contract.stubrunner.StubFinder;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -15,7 +15,7 @@ import java.time.Duration;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureStubRunner(
         ids = "com.example:book-api-producer-messaging:+:stubs",
-        stubsMode = StubRunnerProperties.StubsMode.LOCAL
+        stubsMode = StubsMode.LOCAL
 )
 class BookConsumerTest {
 

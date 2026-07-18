@@ -3,7 +3,7 @@ package com.example;
 import org.junit.jupiter.api.Test;
 import sh.stubborn.contract.stubrunner.spring.AutoConfigureStubRunner;
 import sh.stubborn.contract.stubrunner.spring.StubRunnerPort;
-import sh.stubborn.contract.stubrunner.spring.StubRunnerProperties;
+import sh.stubborn.contract.stubrunner.StubsMode;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
@@ -12,7 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @AutoConfigureStubRunner(
         ids = "com.example:beer-api-producer:+:stubs",
-        stubsMode = StubRunnerProperties.StubsMode.LOCAL
+        stubsMode = StubsMode.LOCAL
 )
 class BeerClientTest {
 

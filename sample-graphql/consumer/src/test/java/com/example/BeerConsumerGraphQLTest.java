@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 import sh.stubborn.contract.stubrunner.StubFinder;
 import sh.stubborn.contract.stubrunner.spring.AutoConfigureStubRunner;
-import sh.stubborn.contract.stubrunner.spring.StubRunnerProperties;
+import sh.stubborn.contract.stubrunner.StubsMode;
 
 import java.net.URI;
 
@@ -19,7 +19,7 @@ import static org.assertj.core.api.BDDAssertions.then;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 @AutoConfigureStubRunner(
     ids = "com.example:beer-api-producer-graphql:+:stubs",
-    stubsMode = StubRunnerProperties.StubsMode.LOCAL
+    stubsMode = StubsMode.LOCAL
 )
 class BeerConsumerGraphQLTest {
 

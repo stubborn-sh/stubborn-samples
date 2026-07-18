@@ -43,6 +43,12 @@
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>sh.stubborn</groupId>
+            <artifactId>stubborn-wiremock-spring</artifactId>
+            <version>${stubborn-contract.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>

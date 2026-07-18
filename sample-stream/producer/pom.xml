@@ -22,6 +22,18 @@
         <spring-cloud-stream.version>5.0.2</spring-cloud-stream.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>sh.stubborn</groupId>
+                <artifactId>stubborn-dependencies</artifactId>
+                <version>${stubborn-contract.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
