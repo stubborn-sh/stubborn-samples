@@ -82,7 +82,43 @@ cd ../consumer
 == Requirements
 
 * Java 17+
+* Spring Boot 4.1.x
 * Maven 3.9+ or Gradle 8.13+
+
+== Dependency setup
+
+Every sample imports a single BOM — no individual library versions required:
+
+[source,xml]
+----
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>sh.stubborn</groupId>
+            <artifactId>stubborn-dependencies</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+----
+
+The BOM manages compatible versions of `spring-cloud-stream` (5.0.2),
+`rest-assured` (6.0.0), `spring-boot-restclient`, and all `sh.stubborn` artifacts.
+Add the Maven Central snapshots repository to resolve the snapshot:
+
+[source,xml]
+----
+<repositories>
+    <repository>
+        <id>central-snapshots</id>
+        <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+        <snapshots><enabled>true</enabled></snapshots>
+        <releases><enabled>false</enabled></releases>
+    </repository>
+</repositories>
+----
 
 == License
 
