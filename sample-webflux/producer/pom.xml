@@ -64,7 +64,7 @@
             </plugin>
             <plugin>
                 <groupId>sh.stubborn</groupId>
-                <artifactId>stubborn-maven-plugin</artifactId>
+                <artifactId>stubborn-contract-maven-plugin</artifactId>
                 <version>${stubborn-contract.version}</version>
                 <extensions>true</extensions>
                 <configuration>
