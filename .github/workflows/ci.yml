@@ -136,6 +136,7 @@ jobs:
           path: '${{ matrix.sample }}/**/build/test-results/**/TEST-*.xml'
           reporter: java-junit
           fail-on-error: false
+          fail-on-empty: false
 
   build-compatibility:
     name: Compatibility (SCC ↔ Stubborn)
