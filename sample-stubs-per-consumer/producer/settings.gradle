@@ -6,5 +6,4 @@ pluginManagement {
     }
 }
 
-rootProject.name = 'sample-messaging'
-include 'producer', 'consumer'
+rootProject.name = 'sample-stubs-per-consumer-producer'
