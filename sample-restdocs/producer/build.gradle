@@ -18,5 +18,5 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
-    testImplementation "sh.stubborn:stubborn-contract-wiremock:0.1.0-SNAPSHOT"
+    testImplementation "sh.stubborn:stubborn-wiremock-spring:0.1.0-SNAPSHOT"
 }

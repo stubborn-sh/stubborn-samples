@@ -23,6 +23,7 @@ dependencies {
 
 contracts {
     testFramework = 'JUNIT5'
+    contractsDslDir = file("${project.projectDir}/src/test/resources/contracts")
     baseClassMappings {
         baseClassMapping('.*beer-api-consumer-a.*', 'com.example.ConsumerABase')
         baseClassMapping('.*beer-api-consumer-b.*', 'com.example.ConsumerBBase')
