@@ -7,7 +7,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = ProducerApplication.class)
-public abstract class ConsumerBBase {
+public abstract class BeerBase {
 
 	@LocalServerPort
 	int port;
