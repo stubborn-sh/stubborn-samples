@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-wiremock</artifactId>
+            <artifactId>stubborn-contract-wiremock</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>

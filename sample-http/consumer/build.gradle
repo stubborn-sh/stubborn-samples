@@ -22,5 +22,5 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation "sh.stubborn:stubborn-starter-stub-runner:0.1.0-SNAPSHOT"
+    testImplementation "sh.stubborn:stubborn-starter-contract-stub-runner:0.1.0-SNAPSHOT"
 }

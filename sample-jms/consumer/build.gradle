@@ -18,6 +18,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-artemis'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'sh.stubborn:stubborn-starter-stub-runner:0.1.0-SNAPSHOT'
+    testImplementation 'sh.stubborn:stubborn-starter-contract-stub-runner:0.1.0-SNAPSHOT'
     testImplementation 'org.apache.activemq:artemis-jakarta-server:2.40.0'
 }

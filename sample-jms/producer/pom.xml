@@ -25,7 +25,7 @@
         <dependencies>
             <dependency>
                 <groupId>sh.stubborn</groupId>
-                <artifactId>stubborn-dependencies</artifactId>
+                <artifactId>stubborn-contract-dependencies</artifactId>
                 <version>${stubborn-contract.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
@@ -59,7 +59,7 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-starter-verifier</artifactId>
+            <artifactId>stubborn-starter-contract-verifier</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>

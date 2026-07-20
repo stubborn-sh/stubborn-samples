@@ -19,7 +19,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-integration'
     implementation 'org.springframework.cloud:spring-cloud-starter-stream-rabbit'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'sh.stubborn:stubborn-starter-verifier:0.1.0-SNAPSHOT'
+    testImplementation 'sh.stubborn:stubborn-starter-contract-verifier:0.1.0-SNAPSHOT'
 }
 
 dependencyManagement {
