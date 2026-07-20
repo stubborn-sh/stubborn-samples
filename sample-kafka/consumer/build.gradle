@@ -15,10 +15,11 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-integration'
-    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.springframework.boot:spring-boot-starter-kafka'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'sh.stubborn:stubborn-starter-contract-stub-runner:0.1.0-SNAPSHOT'
+    testImplementation 'sh.stubborn:stubborn-messaging-kafka:0.1.0-SNAPSHOT'
     testImplementation 'org.springframework.kafka:spring-kafka-test'
-    testImplementation 'org.testcontainers:kafka'
+    testImplementation 'org.awaitility:awaitility'
 }
