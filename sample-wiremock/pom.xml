@@ -21,6 +21,18 @@
         <stubborn-contract.version>0.1.0-SNAPSHOT</stubborn-contract.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>sh.stubborn</groupId>
+                <artifactId>stubborn-contract-dependencies</artifactId>
+                <version>${stubborn-contract.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

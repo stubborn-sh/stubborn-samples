@@ -45,7 +45,7 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-contract-wiremock-spring</artifactId>
+            <artifactId>stubborn-wiremock-spring</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>
