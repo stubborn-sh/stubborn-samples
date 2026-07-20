@@ -8,7 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest(classes = ProducerApplication.class)
-public abstract class BaseClass {
+public abstract class ContractVerifierBase {
 
     @Autowired
     WebApplicationContext context;
