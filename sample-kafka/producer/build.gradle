@@ -20,8 +20,8 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'sh.stubborn:stubborn-starter-contract-verifier:0.1.0-SNAPSHOT'
-    testImplementation 'org.springframework.kafka:spring-kafka-test:4.1.0'
-    testImplementation 'org.testcontainers:kafka:2.0.5'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+    testImplementation 'org.testcontainers:testcontainers-kafka:2.0.5'
 }
 
 contracts {

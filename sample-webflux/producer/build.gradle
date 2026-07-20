@@ -23,6 +23,7 @@ dependencies {
 
 contracts {
     testFramework = 'JUNIT5'
+    testMode = 'EXPLICIT'
     packageWithBaseClasses = 'com.example'
     contractsDslDir = file("${project.projectDir}/src/test/resources/contracts")
 }

@@ -1,0 +1,20 @@
+package com.example;
+
+import io.restassured.RestAssured;
+import org.junit.jupiter.api.BeforeEach;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+
+@SpringBootTest(classes = ProducerApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+public abstract class ContractVerifierBase {
+
+	@LocalServerPort
+	int port;
+
+	@BeforeEach
+	public void setup() {
+		RestAssured.baseURI = "http://localhost:" + port;
+	}
+
+}
