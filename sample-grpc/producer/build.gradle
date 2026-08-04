@@ -31,6 +31,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-grpc-server-test'
     testImplementation 'sh.stubborn:stubborn-contract-starter-verifier:0.1.0-SNAPSHOT'
     testImplementation "com.squareup.okhttp3:okhttp:4.12.0"
+    // Generated CUSTOM-mode contract test injects HttpVerifier via jakarta.inject @Inject
+    testImplementation 'jakarta.inject:jakarta.inject-api:2.0.1'
 }
 
 protobuf {
