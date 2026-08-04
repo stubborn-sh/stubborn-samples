@@ -54,13 +54,13 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-starter-contract-stub-runner</artifactId>
+            <artifactId>stubborn-contract-starter-stub-runner</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-messaging-kafka</artifactId>
+            <artifactId>stubborn-contract-messaging-kafka</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>

@@ -68,7 +68,7 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-starter-contract-stub-runner</artifactId>
+            <artifactId>stubborn-contract-starter-stub-runner</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>
