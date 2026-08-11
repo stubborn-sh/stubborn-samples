@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>sample-helidon</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Sample Helidon — Consumer Stub Runner</name>
+    <description>Helidon MicroProfile consumer that runs Stubborn Contract stubs via @HelidonTest, without Spring</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Helidon 4.x requires Java 21+. -->
+        <maven.compiler.release>21</maven.compiler.release>
+        <helidon.version>4.5.2</helidon.version>
+        <!--
+          Align Jetty to the version the stub runner's embedded WireMock (3.13.2) is tested against,
+          in case a transitive drags a different one. Jetty is only present via WireMock (test scope)
+          — Helidon runs on its own WebServer — so pinning it is safe. Declared before helidon-bom.
+        -->
+        <jetty.version>12.0.37</jetty.version>
+        <!--
+          The Stubborn Contract adapter is pinned explicitly rather than via the
+          stubborn-contract-dependencies BOM: that BOM also manages shared transitive libraries
+          which the Helidon BOM already manages for its own tested versions. Pinning the single
+          adapter artifact keeps the Helidon BOM authoritative.
+        -->
+        <stubborn-contract.version>0.1.0-SNAPSHOT</stubborn-contract.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- Jetty alignment for WireMock — declared before helidon-bom so it wins. -->
+            <dependency>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-bom</artifactId>
+                <version>${jetty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.eclipse.jetty.ee10</groupId>
+                <artifactId>jetty-ee10-bom</artifactId>
+                <version>${jetty.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.helidon</groupId>
+                <artifactId>helidon-bom</artifactId>
+                <version>${helidon.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Helidon MicroProfile consumer application (CDI + MP Config + JAX-RS). -->
+        <dependency>
+            <groupId>io.helidon.microprofile.bundles</groupId>
+            <artifactId>helidon-microprofile</artifactId>
+        </dependency>
+
+        <!-- Test: Helidon MP JUnit 5 harness + the Stubborn Contract Helidon stub-runner adapter. -->
+        <dependency>
+            <groupId>io.helidon.microprofile.testing</groupId>
+            <artifactId>helidon-microprofile-testing-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>sh.stubborn</groupId>
+            <artifactId>stubborn-contract-stub-runner-helidon</artifactId>
+            <version>${stubborn-contract.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.11.4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+    </repositories>
+</project>

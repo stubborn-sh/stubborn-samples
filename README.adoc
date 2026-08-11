@@ -42,6 +42,15 @@ toc::[]
 |link:sample-wiremock[sample-wiremock]
 |Standalone WireMock usage without the Stubborn Contract plugin
 
+|link:sample-quarkus[sample-quarkus]
+|Quarkus consumer running stubs in a `@QuarkusTest` (Spring-free), via `stubborn-contract-stub-runner-quarkus`
+
+|link:sample-micronaut[sample-micronaut]
+|Micronaut consumer running stubs in a `@MicronautTest` (Spring-free), via `stubborn-contract-stub-runner-micronaut`
+
+|link:sample-helidon[sample-helidon]
+|Helidon MicroProfile consumer running stubs in a `@HelidonTest` (Spring-free), via `stubborn-contract-stub-runner-helidon` (requires Java 21)
+
 |link:sample-stubs-per-consumer[sample-stubs-per-consumer]
 |Stubs-per-consumer pattern — each consumer gets tailored stubs
 
