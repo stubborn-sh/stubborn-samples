@@ -76,7 +76,10 @@
             <artifactId>micronaut-jackson-databind</artifactId>
         </dependency>
 
-        <!-- Test: Micronaut Test JUnit 5 + the Stubborn Contract Micronaut stub-runner adapter. -->
+        <!-- Test: Micronaut Test JUnit 5 + the Spring-free Stubborn Contract stub-runner core.
+             The tiny Micronaut adapter (TestPropertyProvider base class) is embedded in this sample
+             under src/test/java/com/example/stubrunner — in 0.1.0 it ships as sample code rather than
+             a published module. -->
         <dependency>
             <groupId>io.micronaut.test</groupId>
             <artifactId>micronaut-test-junit5</artifactId>
@@ -84,7 +87,7 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-contract-stub-runner-micronaut</artifactId>
+            <artifactId>stubborn-contract-stub-runner</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>

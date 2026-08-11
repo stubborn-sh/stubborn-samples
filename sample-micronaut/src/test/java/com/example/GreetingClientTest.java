@@ -5,7 +5,7 @@ import jakarta.inject.Inject;
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import org.junit.jupiter.api.Test;
 
-import sh.stubborn.contract.stubrunner.micronaut.StubRunnerTest;
+import com.example.stubrunner.StubRunnerTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

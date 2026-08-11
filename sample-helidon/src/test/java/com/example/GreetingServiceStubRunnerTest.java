@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import sh.stubborn.contract.stubrunner.StubFinder;
 import sh.stubborn.contract.stubrunner.StubsMode;
-import sh.stubborn.contract.stubrunner.helidon.StubRunner;
+import com.example.stubrunner.StubRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

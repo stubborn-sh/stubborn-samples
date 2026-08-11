@@ -46,10 +46,10 @@ toc::[]
 |Quarkus consumer running stubs in a `@QuarkusTest` (Spring-free), via `stubborn-contract-stub-runner-quarkus`
 
 |link:sample-micronaut[sample-micronaut]
-|Micronaut consumer running stubs in a `@MicronautTest` (Spring-free), via `stubborn-contract-stub-runner-micronaut`
+|Micronaut consumer running stubs in a `@MicronautTest` (Spring-free); the small adapter is embedded in the sample over the `stubborn-contract-stub-runner` core
 
 |link:sample-helidon[sample-helidon]
-|Helidon MicroProfile consumer running stubs in a `@HelidonTest` (Spring-free), via `stubborn-contract-stub-runner-helidon` (requires Java 21)
+|Helidon MicroProfile consumer running stubs in a `@HelidonTest` (Spring-free); the small adapter is embedded in the sample over the `stubborn-contract-stub-runner` core (requires Java 21)
 
 |link:sample-stubs-per-consumer[sample-stubs-per-consumer]
 |Stubs-per-consumer pattern — each consumer gets tailored stubs

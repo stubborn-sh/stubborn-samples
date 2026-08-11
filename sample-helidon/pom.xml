@@ -64,7 +64,10 @@
             <artifactId>helidon-microprofile</artifactId>
         </dependency>
 
-        <!-- Test: Helidon MP JUnit 5 harness + the Stubborn Contract Helidon stub-runner adapter. -->
+        <!-- Test: Helidon MP JUnit 5 harness + the Spring-free Stubborn Contract stub-runner core.
+             The tiny Helidon adapter (@StubRunner annotation + JUnit 5 extension) is embedded in this
+             sample under src/test/java/com/example/stubrunner — in 0.1.0 it ships as sample code
+             rather than a published module. -->
         <dependency>
             <groupId>io.helidon.microprofile.testing</groupId>
             <artifactId>helidon-microprofile-testing-junit5</artifactId>
@@ -72,7 +75,7 @@
         </dependency>
         <dependency>
             <groupId>sh.stubborn</groupId>
-            <artifactId>stubborn-contract-stub-runner-helidon</artifactId>
+            <artifactId>stubborn-contract-stub-runner</artifactId>
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>

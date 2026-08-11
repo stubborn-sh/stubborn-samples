@@ -1,8 +1,14 @@
 # sample-micronaut
 
 A **Micronaut** consumer that runs Stubborn Contract stubs via a `@MicronautTest` — **without
-Spring**. It uses `stubborn-contract-stub-runner-micronaut`, which plugs the Spring-free stub
-runner core into Micronaut's `TestPropertyProvider` seam.
+Spring**.
+
+> **0.1.0 note:** the Micronaut adapter (a `TestPropertyProvider` base class + a small support
+> helper) is **embedded in this sample** under `src/test/java/com/example/stubrunner`, layered over
+> the published Spring-free `stubborn-contract-stub-runner` core. It is shipped as copy-pasteable
+> sample code rather than a published module for 0.1.0; if there's demand it can be promoted to a
+> first-class `stubborn-contract-stub-runner-micronaut` artifact. The plumbing it demonstrates plugs
+> the stub runner core into Micronaut's `TestPropertyProvider` seam.
 
 ## What it shows
 

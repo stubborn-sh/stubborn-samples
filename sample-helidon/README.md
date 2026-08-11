@@ -1,8 +1,14 @@
 # sample-helidon
 
 A **Helidon MicroProfile** consumer that runs Stubborn Contract stubs via `@HelidonTest` —
-**without Spring**. It uses `stubborn-contract-stub-runner-helidon`, which exposes a `@StubRunner`
-JUnit 5 extension that publishes running stub ports as MicroProfile Config.
+**without Spring**.
+
+> **0.1.0 note:** the Helidon adapter (a `@StubRunner` annotation + a JUnit 5 extension) is
+> **embedded in this sample** under `src/test/java/com/example/stubrunner`, layered over the
+> published Spring-free `stubborn-contract-stub-runner` core. It is shipped as copy-pasteable sample
+> code rather than a published module for 0.1.0; if there's demand it can be promoted to a
+> first-class `stubborn-contract-stub-runner-helidon` artifact. The extension publishes running stub
+> ports as MicroProfile Config.
 
 ## What it shows
 
