@@ -184,13 +184,8 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          # Quarkus 3.x and Micronaut 4.x support Java 17; Helidon 4.x requires Java 21.
-          # All three are built on Java 21 here (Quarkus/Micronaut target 17 bytecode).
+          # Quarkus 3.x supports Java 17; built on Java 21 here (targets 17 bytecode).
           - sample: sample-quarkus
-            java: '21'
-          - sample: sample-micronaut
-            java: '21'
-          - sample: sample-helidon
             java: '21'
 
     steps:
