@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/greeting"
+  },
+  "response": {
+    "status": 200,
+    "body": "{\"message\":\"Hello from the stubbed producer\"}",
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

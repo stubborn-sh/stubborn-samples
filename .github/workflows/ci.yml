@@ -176,3 +176,37 @@ jobs:
           path: 'sample-compatibility/**/target/surefire-reports/TEST-*.xml'
           reporter: java-junit
           fail-on-error: false
+
+  build-frameworks:
+    name: Framework — ${{ matrix.sample }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Quarkus 3.x supports Java 17; built on Java 21 here (targets 17 bytecode).
+          - sample: sample-quarkus
+            java: '21'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK ${{ matrix.java }}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java }}
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build ${{ matrix.sample }} (Maven)
+        working-directory: ${{ matrix.sample }}
+        run: ./mvnw clean install --no-transfer-progress
+
+      - name: Publish test results
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Framework Test Results — ${{ matrix.sample }}
+          path: '${{ matrix.sample }}/**/target/surefire-reports/TEST-*.xml'
+          reporter: java-junit
+          fail-on-error: false
