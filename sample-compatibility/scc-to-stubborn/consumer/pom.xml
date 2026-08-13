@@ -49,6 +49,18 @@
             <version>${stubborn-contract.version}</version>
             <scope>test</scope>
         </dependency>
+        <!--
+          The SCC-generated stubs jar on the test classpath, so the CLASSPATH-mode test
+          resolves it straight off the classpath (jar scanning) instead of from the local
+          Maven repository.
+        -->
+        <dependency>
+            <groupId>com.example</groupId>
+            <artifactId>compat-scc-producer</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <classifier>stubs</classifier>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <repositories>
