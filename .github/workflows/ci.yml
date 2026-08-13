@@ -187,6 +187,10 @@ jobs:
           # Quarkus 3.x supports Java 17; built on Java 21 here (targets 17 bytecode).
           - sample: sample-quarkus
             java: '21'
+          # Messaging consumer: its @QuarkusTest starts a real Kafka broker via Quarkus
+          # Dev Services (Docker), which ubuntu-latest runners provide out of the box.
+          - sample: sample-quarkus-messaging
+            java: '21'
 
     steps:
       - uses: actions/checkout@v4

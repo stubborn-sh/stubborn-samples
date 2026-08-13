@@ -45,6 +45,9 @@ toc::[]
 |link:sample-quarkus[sample-quarkus]
 |Quarkus consumer running stubs in a `@QuarkusTest` (Spring-free), via `stubborn-contract-stub-runner-quarkus`
 
+|link:sample-quarkus-messaging[sample-quarkus-messaging]
+|Quarkus messaging consumer triggering a stub onto a real Kafka broker (Dev Services) in a `@QuarkusTest`, via `stubborn-contract-stub-runner-messaging-quarkus`
+
 |link:sample-stubs-per-consumer[sample-stubs-per-consumer]
 |Stubs-per-consumer pattern — each consumer gets tailored stubs
 
