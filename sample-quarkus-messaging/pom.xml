@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>sample-quarkus-messaging</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Sample Quarkus — Messaging Consumer Stub Runner</name>
+    <description>Quarkus messaging consumer that triggers a Stubborn Contract stub onto a real Kafka broker inside a @QuarkusTest, without Spring</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+        <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
+        <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
+        <quarkus.platform.version>3.38.1</quarkus.platform.version>
+        <!--
+          The Stubborn Contract adapter is pinned explicitly rather than via the
+          stubborn-contract-dependencies BOM on purpose: that BOM also manages shared transitive
+          libraries (netty, jackson, tomcat) which the Quarkus platform BOM already manages for its
+          own tested versions. Importing both would let one override the other's carefully aligned
+          versions. Pinning the single adapter artifact keeps the Quarkus BOM authoritative.
+        -->
+        <stubborn-contract.version>0.1.0-SNAPSHOT</stubborn-contract.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>${quarkus.platform.artifact-id}</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Minimal Quarkus consumer application: CDI + MicroProfile Config. -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-arc</artifactId>
+        </dependency>
+        <!--
+          SmallRye Reactive Messaging + Kafka connector: the @Incoming listener that consumes the
+          message the triggered stub publishes. Kafka Dev Services (see application.properties)
+          starts a real broker automatically for the test — no manual Testcontainers wiring.
+        -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-messaging-kafka</artifactId>
+        </dependency>
+        <!-- Provides a CDI-managed Jackson ObjectMapper to map the JSON payload onto GreetingEvent. -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-jackson</artifactId>
+        </dependency>
+
+        <!-- Test: Quarkus JUnit 5 harness + the Stubborn Contract Quarkus messaging stub-runner adapter. -->
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-junit5</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>sh.stubborn</groupId>
+            <artifactId>stubborn-contract-stub-runner-messaging-quarkus</artifactId>
+            <version>${stubborn-contract.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.awaitility</groupId>
+            <artifactId>awaitility</artifactId>
+            <version>4.2.2</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.27.3</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>${quarkus.platform.group-id}</groupId>
+                <artifactId>quarkus-maven-plugin</artifactId>
+                <version>${quarkus.platform.version}</version>
+                <extensions>true</extensions>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>generate-code</goal>
+                            <goal>generate-code-tests</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+    </repositories>
+</project>

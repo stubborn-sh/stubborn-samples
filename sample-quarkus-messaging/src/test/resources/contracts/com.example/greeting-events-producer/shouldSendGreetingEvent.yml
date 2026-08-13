@@ -1,0 +1,10 @@
+description: "should send a greeting event when the greeting label is triggered"
+label: "greeting_event"
+input:
+  triggeredBy: "greetingEventTriggered()"
+outputMessage:
+  sentTo: "greetings"
+  body:
+    message: "Hello from the stubbed producer"
+  headers:
+    contentType: "application/json"
