@@ -9,11 +9,13 @@ are interchangeable — the WireMock stub format is the same.
 
 Producer built with *Spring Cloud Contract* (Spring Cloud `2025.1.2` release
 train, Spring Boot 4.1.0). Consumer uses *Stubborn Contract* stub runner
-(Spring Boot 4.1.0) to load and serve the SCC-generated stubs.
+(Spring Boot 4.1.0) to load and serve the SCC-generated stubs, in two modes:
+`LOCAL` (resolved from the Maven repository) and `CLASSPATH` (the SCC stubs jar
+on the test classpath, scanned in place).
 
 ----
-cd scc-to-stubborn/producer && ./mvnw clean install   # SCC generates stubs
-cd scc-to-stubborn/consumer && ./mvnw test            # Stubborn runner loads them
+cd scc-to-stubborn/producer && ./mvnw clean install   # SCC generates + installs stubs
+cd scc-to-stubborn/consumer && ./mvnw test            # Stubborn runner loads them (LOCAL + CLASSPATH)
 ----
 
 === stubborn-to-scc
