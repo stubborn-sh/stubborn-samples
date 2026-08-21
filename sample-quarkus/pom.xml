@@ -23,7 +23,7 @@
           own tested versions. Importing both would let one override the other's carefully aligned
           versions. Pinning the single adapter artifact keeps the Quarkus BOM authoritative.
         -->
-        <stubborn-contract.version>0.1.0-SNAPSHOT</stubborn-contract.version>
+        <stubborn-contract.version>0.1.1-SNAPSHOT</stubborn-contract.version>
     </properties>
 
     <dependencyManagement>

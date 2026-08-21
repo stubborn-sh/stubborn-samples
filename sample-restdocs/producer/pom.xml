@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <stubborn-contract.version>0.1.0-SNAPSHOT</stubborn-contract.version>
+        <stubborn-contract.version>0.1.1-SNAPSHOT</stubborn-contract.version>
         <snippetsDirectory>${project.build.directory}/snippets</snippetsDirectory>
     </properties>
 
