@@ -18,7 +18,8 @@
 set -euo pipefail
 
 VERSION="${1:?usage: set-samples-version.sh <version>}"
-ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+# SAMPLES_ROOT lets the BATS suite point the rewrite at a throwaway fixture.
+ROOT="${SAMPLES_ROOT:-$(cd "$(dirname "$0")/.." && pwd)}"
 cd "$ROOT"
 
 # Maven: the stubborn-contract.version property (matches whatever it currently holds).
