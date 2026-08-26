@@ -1,0 +1,64 @@
+name: Bump stubborn-contract version
+
+# Pin every sample to a given stubborn-contract version and let CI verify against
+# it. Fired automatically when stubborn-contract publishes a release (via a
+# repository_dispatch from that repo's release workflow), or by hand.
+#
+# It opens an auto-merging PR: the samples CI (build every sample against the new
+# version) must go green before it merges.
+
+on:
+  repository_dispatch:
+    types: [stubborn-contract-released]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'stubborn-contract version to pin (e.g. 0.1.3)'
+        required: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Resolve target version
+        id: v
+        run: |
+          set -euo pipefail
+          VERSION="${{ github.event.client_payload.version }}"
+          [ -z "$VERSION" ] && VERSION="${{ inputs.version }}"
+          if [ -z "$VERSION" ]; then
+            echo "No version supplied (client_payload.version / inputs.version)." >&2
+            exit 1
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Pin samples to ${{ steps.v.outputs.version }}
+        run: scripts/set-samples-version.sh "${{ steps.v.outputs.version }}"
+
+      - name: Open auto-merging PR
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.v.outputs.version }}
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "Samples already pinned to ${VERSION}; nothing to do."
+            exit 0
+          fi
+          branch="chore/bump-stubborn-${VERSION}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${branch}"
+          git commit -am "chore: pin samples to stubborn-contract ${VERSION}"
+          git push -f -u origin "${branch}"
+          gh pr create --base main --head "${branch}" \
+            --title "chore: pin samples to stubborn-contract ${VERSION}" \
+            --body "Automated: stubborn-contract ${VERSION} was released, so every sample is pinned to it and CI verifies against the release. Auto-merges once CI is green." \
+            || echo "PR already exists for ${branch}"
+          gh pr merge --auto --squash "${branch}" || echo "Auto-merge not enabled; merge manually once green."
