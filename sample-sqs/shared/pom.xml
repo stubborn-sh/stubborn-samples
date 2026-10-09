@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.example</groupId>
-    <artifactId>stubborn-sqs</artifactId>
+    <artifactId>sample-sqs-shared</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>Sample SQS — Spring-free SQS messaging building block (prototype)</name>
     <description>
