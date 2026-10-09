@@ -27,6 +27,7 @@ jobs:
           - sample-stubs-per-consumer
           - sample-graphql
           - sample-grpc
+          - sample-sqs
 
     steps:
       - uses: actions/checkout@v4
@@ -37,6 +38,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
           cache: maven
+
+      # A sample may ship a shared module that its producer and consumer both depend on
+      # (sample-sqs prototypes the SQS building block there until it moves to the library).
+      # It has to be installed before them, and the standalone step below deliberately does
+      # not run for a sample that has a producer.
+      - name: Build shared module (Maven)
+        if: hashFiles(format('{0}/shared/pom.xml', matrix.sample)) != ''
+        working-directory: ${{ matrix.sample }}/shared
+        run: ./mvnw clean install --no-transfer-progress
 
       - name: Build producer (Maven)
         if: hashFiles(format('{0}/producer/pom.xml', matrix.sample)) != ''
