@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.example</groupId>
+    <artifactId>sample-classpath-matrix</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <name>Sample Classpath Matrix</name>
+    <description>
+        Proves that the stub runner's embedded WireMock actually starts and serves under
+        every runtime we claim to support, rather than only resolving on paper.
+
+        This exists because of stubborn-sh/stubborn#142: WireMock's wiremock-jetty12 brings
+        jetty-ee10 12.0.x, while Spring Boot 4.1 aligns Jetty core to 12.1.x and imports
+        jetty-ee11-bom. Those load together and the stub server dies with
+
+            NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
+
+        A version pin cannot fix that: ee10 has no release compatible with core 12.1, and
+        pinning core down to 12.0.x is what broke spring-boot-starter-jetty applications in
+        the first place. The fix is to stop sharing a Jetty at all — wiremock-standalone is
+        shaded, carrying its Jetty relocated under wiremock.org.eclipse.jetty, so the
+        application and the stub server each get their own and cannot collide.
+
+        Each module below asserts both halves: the application's own Jetty is whatever its
+        framework manages, AND a stub server boots and serves a request on the same JVM.
+    </description>
+
+    <modules>
+        <module>manual</module>
+        <module>boot-tomcat</module>
+        <module>boot-jetty</module>
+        <module>quarkus</module>
+    </modules>
+</project>
