@@ -27,6 +27,9 @@ toc::[]
 |link:sample-jms[sample-jms]
 |JMS messaging contracts via Apache Artemis
 
+|link:sample-sqs[sample-sqs]
+|Amazon SQS messaging contracts, verified against LocalStack
+
 |link:sample-rest-assured[sample-rest-assured]
 |REST-Assured mode — explicit HTTP calls in generated tests
 
