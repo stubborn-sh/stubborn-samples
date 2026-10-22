@@ -18,17 +18,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <!--
-          Needs the 0.2.0 stub server: WireMock's shaded standalone build plus plaintext
-          HTTP/2 turned off. Pinned to the snapshot until 0.2.0 is released, at which point
-          the release's samples bump replaces it.
-        -->
-        <stubborn-contract.version>0.1.4-SNAPSHOT</stubborn-contract.version>
-        <!--
-          Stubborn's BOM manages wiremock-standalone from 0.2.0 onwards. It is pinned here as
-          well so this sample still builds against the older release this pom points at.
-        -->
-        <wiremock.version>3.13.2</wiremock.version>
+        <stubborn-contract.version>0.1.3</stubborn-contract.version>
     </properties>
 
     <dependencyManagement>
@@ -53,41 +43,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!--
-          stubborn-contract-wiremock is the low-level WireMock helper, so it declares the
-          WireMock API it compiles against: org.wiremock:wiremock plus wiremock-jetty12.
-          That pair does not work under Spring Boot 4.1. spring-boot-dependencies
-          version-manages every org.eclipse.jetty:* artifact to 12.1.x, including the
-          jetty-ee10 jars wiremock-jetty12 brings, and the server then dies on
-          `NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)`.
-          There is no version to pin: no ee10 release works against Jetty core 12.1.
-
-          So swap in WireMock's shaded standalone build, which relocates every Jetty class to
-          wiremock.org.eclipse.jetty.* while leaving com.github.tomakehurst.* alone — WireMock
-          runs its Jetty, the application runs Boot's, and code compiled against WireMock is
-          unaffected. This is the pattern for depending on stubborn-contract-wiremock directly
-          on Boot 4.1; through the stub runner starters it is already the default.
-        -->
         <dependency>
             <groupId>sh.stubborn</groupId>
             <artifactId>stubborn-contract-wiremock</artifactId>
             <version>${stubborn-contract.version}</version>
-            <scope>test</scope>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.wiremock</groupId>
-                    <artifactId>wiremock</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>org.wiremock</groupId>
-                    <artifactId>wiremock-jetty12</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.wiremock</groupId>
-            <artifactId>wiremock-standalone</artifactId>
-            <version>${wiremock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
