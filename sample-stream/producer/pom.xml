@@ -19,6 +19,14 @@
     <properties>
         <java.version>17</java.version>
         <stubborn-contract.version>0.1.3</stubborn-contract.version>
+        <!--
+          Spring Cloud ships its own release train, so spring-boot-dependencies does not
+          manage spring-cloud-stream and Stubborn's BOM deliberately does not either —
+          pinning another project's train from a third party's BOM is how versions get
+          silently overridden. A Spring Cloud Stream consumer imports the train itself,
+          as the compatibility samples here already do.
+        -->
+        <spring-cloud.version>2025.1.2</spring-cloud.version>
     </properties>
 
     <dependencyManagement>
@@ -27,6 +35,13 @@
                 <groupId>sh.stubborn</groupId>
                 <artifactId>stubborn-contract-dependencies</artifactId>
                 <version>${stubborn-contract.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
