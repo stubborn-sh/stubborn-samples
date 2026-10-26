@@ -31,13 +31,18 @@
 
             a-no-bom           core 12.1.x + ee10 12.0.30. The stub server dies. This is
                                the bug as reported in stubborn-sh/stubborn#142.
-            b-bom-pinned       Stubborn 0.2.0's BOM, which pinned every Jetty artifact to
-                               12.0.x. The stub server works, but the application's Jetty is
-                               dragged down to 12.0.x with it -- the complaint in #142.
-            c-ee10-aligned     ee10 imported at Boot's own Jetty version. Everything lands
-                               on one line and both halves work. This is what Stubborn's BOM
-                               does from 0.2.1 on, so the explicit import below becomes
-                               unnecessary.
+            b-bom-only         Stubborn's BOM and nothing else, which is what a user
+                               actually writes. What this proves depends on the Stubborn
+                               version pinned in it, and the release automation rewrites
+                               that: on 0.2.0 the BOM pins all of Jetty to 12.0.x and the
+                               application stops starting; from 0.2.1 it manages only ee10
+                               and both halves work. One of its two test classes runs and
+                               the other is skipped, so it is green either side of the fix
+                               and starts proving it the day the bump lands.
+            c-ee10-aligned     ee10 imported at Boot's own Jetty version by hand. Everything
+                               lands on one line and both halves work. This is the fix to
+                               apply yourself on 0.2.0; from 0.2.1 Stubborn's BOM does it and
+                               the import can go.
             d-shaded-standalone  wiremock-standalone, whose Jetty is relocated. Both halves
                                work, but Stubborn's response-template helpers cannot be
                                registered against it, which is why this is not the answer.
@@ -47,7 +52,7 @@
 
     <modules>
         <module>a-no-bom</module>
-        <module>b-bom-pinned</module>
+        <module>b-bom-only</module>
         <module>c-ee10-aligned</module>
         <module>d-shaded-standalone</module>
     </modules>

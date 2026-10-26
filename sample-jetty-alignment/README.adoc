@@ -47,13 +47,15 @@ NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
 |stub server ✗
 |The bug as reported. Nothing complains at build time; the stub server dies on first touch.
 
-|`b-bom-pinned`
-|12.0.x (Stubborn 0.2.0 BOM)
-|12.0.x
-|application ✗
-|Stubborn 0.2.0 pinned every Jetty artifact to 12.0.x. ee10 and the core now agree and the
- stub server runs — but an imported BOM outranks the platform BOM, so the application's
- Jetty moved too, and Boot's ee11 layer is still 12.1.x. The split just moved.
+|`b-bom-only`
+|depends on the pinned Stubborn
+|depends
+|0.2.0 ✗ / 0.2.1 ✓
+|Stubborn's BOM and nothing else — no import, no shading, no exclusions. On 0.2.0 the BOM
+ pins all of Jetty to 12.0.x: ee10 and the core agree so the stub server runs, but the pin
+ outranks Boot, moves the application's Jetty, and leaves Boot's ee11 layer at 12.1.x on top
+ of a 12.0.x core, so the application stops starting. From 0.2.1 the BOM manages only ee10
+ and both halves work.
 
 |`c-ee10-aligned`
 |12.1.x (Boot)
@@ -76,7 +78,26 @@ NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
 * On Stubborn *0.2.0*, add the `jetty-ee10-bom` import from `c-ee10-aligned` to your own
   `dependencyManagement`. Use `${jetty.version}` rather than a literal, so it follows Boot.
 * From Stubborn *0.2.1* on, Stubborn's BOM manages ee10 at Boot's Jetty line itself and you
-  need nothing — `c-ee10-aligned` is what you get by default.
+  need nothing — `b-bom-only` is then enough on its own.
+
+== The fix, before it ships
+
+`b-bom-only` is the module that changes behaviour when the fix lands, so it is also the one
+to point at an unreleased build:
+
+[source,bash]
+----
+cd b-bom-only && ../mvnw test -Dstubborn-contract.version=0.2.1-SNAPSHOT
+----
+
+That fails until a 0.2.1 snapshot is published, and passes once one is — at which point
+`BomAlignedWithBootTest` is the class that runs instead of `BomPinsJettyDownTest`. Nothing
+in the module changes; only which of the two assumptions holds.
+
+Because `scripts/set-samples-version.sh` rewrites `stubborn-contract.version` across every
+sample when a release lands, and the bump PR only merges on green CI, these tests had to be
+written to pass on both sides of the fix. A test that simply asserted today's breakage
+would have blocked the 0.2.1 bump rather than demonstrating it.
 
 The `0.2.0` release notes said a version pin could not fix this and that no ee10 release
 worked against a 12.1 core. That was wrong, and `c-ee10-aligned` is the counter-example.

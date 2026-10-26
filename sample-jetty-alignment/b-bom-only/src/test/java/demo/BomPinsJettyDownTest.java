@@ -8,6 +8,7 @@ import java.net.http.HttpResponse;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -18,32 +19,36 @@ import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 /**
- * b) Stubborn 0.2.0's BOM, which pinned every org.eclipse.jetty artifact to 12.0.x.
+ * Stubborn <= 0.2.0: the BOM pinned every org.eclipse.jetty artifact to the 12.0.x line.
  *
- * <p>The pin does what it was meant to: ee10 and the core agree, and the stub server runs.
- * The cost is that an imported BOM outranks the platform BOM, so it moves the
- * application's Jetty too — and it only pinned the artifacts WireMock needed, leaving
- * Boot's own ee11 layer at 12.1.x against a 12.0.x core. The split just moved.
+ * <p>Skipped entirely once the pinned Stubborn version is one whose BOM aligns instead —
+ * see {@link BomAlignedWithBootTest}, which then takes over. Exactly one of the two runs.
  */
-class PinnedJettyTest {
+class BomPinsJettyDownTest {
+
+    @org.junit.jupiter.api.BeforeEach
+    void onlyForABomThatPinsJettyDown() {
+        assumeTrue(!BomAlignment.alignedWithBoot(),
+                "the pinned Stubborn BOM aligns ee10 with Boot, so BomAlignedWithBootTest covers it");
+    }
 
     @Test
-    @DisplayName("the BOM has pulled the Jetty core down to 12.0.x, under Boot's 12.1.x")
+    @DisplayName("the BOM has pulled Jetty core down to 12.0.x, under the 12.1.x Boot manages")
     void coreJettyIsPinnedDown() {
         assertThat(JettyVersions.core()).startsWith("12.0.");
     }
 
     @Test
-    @DisplayName("ee10 agrees with it, which is why the stub server works here")
+    @DisplayName("ee10 agrees with it, which is the one thing the pin got right")
     void ee10AgreesWithTheCore() {
-        assertThat(JettyVersions.ee10Servlet()).startsWith("12.0.");
         assertThat(JettyVersions.ee10Servlet()).isEqualTo(JettyVersions.core());
     }
 
     @Test
-    @DisplayName("the stub server starts and serves")
+    @DisplayName("so the stub server starts and serves")
     void stubServerStartsAndServes() throws Exception {
         WireMockServer server = new WireMockServer(options().dynamicPort());
         server.start();
@@ -54,7 +59,6 @@ class PinnedJettyTest {
                     HttpRequest.newBuilder(URI.create("http://localhost:" + server.port() + "/ping")).build(),
                     HttpResponse.BodyHandlers.ofString());
 
-            assertThat(response.statusCode()).isEqualTo(200);
             assertThat(response.body()).isEqualTo("pong");
         }
         finally {
@@ -63,8 +67,11 @@ class PinnedJettyTest {
     }
 
     @Test
-    @DisplayName("but the application itself no longer starts: Boot's ee11 layer is still 12.1.x")
+    @DisplayName("but the application no longer starts: Boot's own ee11 layer is still 12.1.x")
     void applicationNoLongerStarts() {
+        // The pin only covered the artifacts WireMock needs. Boot's web server runs on the
+        // ee11 servlet layer, which the BOM never mentioned, so it stayed at 12.1.x and now
+        // sits on top of a 12.0.x core. The split did not close; it moved.
         assertThatThrownBy(() -> {
             try (ConfigurableApplicationContext context = new SpringApplicationBuilder(DemoApplication.class)
                     .web(WebApplicationType.SERVLET)

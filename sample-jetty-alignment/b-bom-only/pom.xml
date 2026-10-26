@@ -10,14 +10,29 @@
         <relativePath/>
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>jetty-alignment-b-bom-pinned</artifactId>
+    <artifactId>jetty-alignment-b-bom-only</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>Jetty Alignment — b) Stubborn 0.2.0 BOM, Jetty pinned to 12.0.x</name>
+    <name>Jetty Alignment — b) Stubborn's BOM and nothing else</name>
     <description>
-        What Stubborn 0.2.0 shipped. Its BOM pinned every org.eclipse.jetty artifact to the
-        12.0.x line so that ee10 and the core agreed. They do agree, and the stub server
-        works — but an imported BOM beats the platform BOM, so the application's own Jetty
-        is pinned down to 12.0.x too. That is the regression reported in #142.
+        Stubborn's BOM on its own: no ee10 import, no shading, no exclusions. The pom a user
+        writes when they just want the stub runner, and the one that has to work.
+
+        Which Stubborn version is pinned here decides what this module demonstrates, and
+        scripts/set-samples-version.sh rewrites that on every release:
+
+          0.2.0 and earlier — the BOM pinned every Jetty artifact to 12.0.x. ee10 and the
+            core agree, so the stub server runs, but the pin outranks Boot and moves the
+            application's Jetty too. Boot's own ee11 layer was never mentioned by the BOM,
+            so it stays at 12.1.x on top of a 12.0.x core and the application stops
+            starting. See BomPinsJettyDownTest.
+
+          0.2.1 and later — the BOM manages only ee10, at the version Boot already uses for
+            the core. Both halves work and the response-template helpers render. See
+            BomAlignedWithBootTest.
+
+        Exactly one of those two test classes runs; the other is skipped. So this module is
+        green before and after the fix, and the day the 0.2.1 bump lands it starts proving
+        the fix instead of the bug — without the pom changing.
     </description>
 
     <properties>
@@ -68,4 +83,23 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <!--
+      So that this module can also be pointed at an unreleased Stubborn:
+
+          ./mvnw test -Dstubborn-contract.version=0.2.1-SNAPSHOT
+
+      That is the check that the fix actually works before it ships. It fails while nothing
+      is published under that version, and passes once there is - at which point
+      BomAlignedWithBootTest is the class that runs. Releases are disabled here, so a normal
+      build still resolves 0.2.0 from Central and never consults this repository.
+    -->
+    <repositories>
+        <repository>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+    </repositories>
 </project>
