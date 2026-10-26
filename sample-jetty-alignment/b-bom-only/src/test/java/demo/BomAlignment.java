@@ -12,15 +12,26 @@ package demo;
  */
 final class BomAlignment {
 
+    /**
+     * The Jetty that Spring Boot manages, handed in by Surefire from the parent's
+     * ${jetty.version}. Compared against rather than hardcoded, so this keeps telling the
+     * truth when Boot moves to a Jetty line that does not exist yet.
+     */
+    private static final String BOOT_JETTY_VERSION = System.getProperty("boot.jetty.version", "");
+
     private BomAlignment() {
     }
 
     /**
-     * True when the BOM left Jetty core alone and aligned ee10 with it — Stubborn 0.2.1 and
-     * later. False when the BOM pinned the whole of Jetty down to the 12.0.x line, which is
-     * what 0.2.0 did.
+     * True when the BOM left Jetty core alone, so the application runs on exactly the Jetty
+     * Boot chose — Stubborn 0.2.1 and later. False when the BOM overrode it, which is what
+     * 0.2.0 did by pinning the whole of Jetty down to the 12.0.x line.
      */
     static boolean alignedWithBoot() {
-        return JettyVersions.core().startsWith("12.1.");
+        if (BOOT_JETTY_VERSION.isEmpty()) {
+            throw new AssertionError("boot.jetty.version was not passed to the tests; "
+                    + "see systemPropertyVariables in this module's pom");
+        }
+        return BOOT_JETTY_VERSION.equals(JettyVersions.core());
     }
 }

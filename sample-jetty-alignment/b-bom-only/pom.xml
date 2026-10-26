@@ -84,6 +84,25 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <!--
+                          Boot's own Jetty, so the tests can tell "the BOM left the core
+                          alone" from "the BOM pinned the core somewhere else" without
+                          hardcoding a version that goes stale when Boot moves.
+                        -->
+                        <boot.jetty.version>${jetty.version}</boot.jetty.version>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
     <!--
       So that this module can also be pointed at an unreleased Stubborn:
 
