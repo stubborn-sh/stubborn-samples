@@ -28,6 +28,7 @@ jobs:
           - sample-graphql
           - sample-grpc
           - sample-classpath-matrix
+          - sample-jetty-alignment
 
     steps:
       - uses: actions/checkout@v4

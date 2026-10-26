@@ -1,0 +1,82 @@
+= Sample: Jetty alignment on Spring Boot 4.1
+
+Four ways to put Stubborn's stub runner next to a `spring-boot-starter-jetty`
+application, side by side, with tests that assert what each one actually does.
+
+Background: https://github.com/stubborn-sh/stubborn/issues/142[stubborn-sh/stubborn#142].
+
+== Run it
+
+[source,bash]
+----
+./mvnw clean test
+----
+
+All four modules pass. The two that demonstrate breakage assert the breakage, so a
+green build means every combination below behaved exactly as described.
+
+== Why this breaks at all
+
+Jetty 12 is one product published under several groupIds. Spring Boot 4.1 imports
+`jetty-bom` and `jetty-ee11-bom`, so it manages:
+
+* `org.eclipse.jetty` — the core
+* `org.eclipse.jetty.ee11` — the Jakarta EE 11 servlet layer, used by Boot's own web server
+
+It does *not* manage `org.eclipse.jetty.ee10`, which is the servlet layer
+`wiremock-jetty12` is built against. With nothing managing it, ee10 resolves to
+whatever `wiremock-jetty12` declares: `12.0.30`.
+
+Mixing minor lines resolves cleanly and fails later, at runtime, because
+`ServletContextHandler` calls `Environment.ensure` in its static initializer and that
+signature changed between 12.0 and 12.1:
+
+----
+NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
+----
+
+== The four combinations
+
+[cols="1,1,1,1,2",options="header"]
+|===
+|Module |Core Jetty |ee10 |Works? |What it shows
+
+|`a-no-bom`
+|12.1.x (Boot)
+|12.0.30 (WireMock)
+|stub server ✗
+|The bug as reported. Nothing complains at build time; the stub server dies on first touch.
+
+|`b-bom-pinned`
+|12.0.x (Stubborn 0.2.0 BOM)
+|12.0.x
+|application ✗
+|Stubborn 0.2.0 pinned every Jetty artifact to 12.0.x. ee10 and the core now agree and the
+ stub server runs — but an imported BOM outranks the platform BOM, so the application's
+ Jetty moved too, and Boot's ee11 layer is still 12.1.x. The split just moved.
+
+|`c-ee10-aligned`
+|12.1.x (Boot)
+|12.1.x
+|both ✓
+|The fix. Jetty 12.1.x still publishes ee10 and `wiremock-jetty12` runs on it. Managing
+ only ee10, at the version Boot already uses, fills a gap instead of overriding a choice.
+
+|`d-shaded-standalone`
+|12.1.x (Boot)
+|none (relocated)
+|both ✓, helpers ✗
+|`wiremock-standalone` hides its Jetty under `wiremock.org.eclipse.jetty`, so nothing is
+ shared. It works — but the same shading relocates Handlebars, so Stubborn's
+ response-template helpers cannot be registered against it.
+|===
+
+== What this means for you
+
+* On Stubborn *0.2.0*, add the `jetty-ee10-bom` import from `c-ee10-aligned` to your own
+  `dependencyManagement`. Use `${jetty.version}` rather than a literal, so it follows Boot.
+* From Stubborn *0.2.1* on, Stubborn's BOM manages ee10 at Boot's Jetty line itself and you
+  need nothing — `c-ee10-aligned` is what you get by default.
+
+The `0.2.0` release notes said a version pin could not fix this and that no ee10 release
+worked against a 12.1 core. That was wrong, and `c-ee10-aligned` is the counter-example.

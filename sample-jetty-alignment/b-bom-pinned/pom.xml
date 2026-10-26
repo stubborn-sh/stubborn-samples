@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.2</version>
+        <relativePath/>
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>jetty-alignment-b-bom-pinned</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Jetty Alignment — b) Stubborn 0.2.0 BOM, Jetty pinned to 12.0.x</name>
+    <description>
+        What Stubborn 0.2.0 shipped. Its BOM pinned every org.eclipse.jetty artifact to the
+        12.0.x line so that ee10 and the core agreed. They do agree, and the stub server
+        works — but an imported BOM beats the platform BOM, so the application's own Jetty
+        is pinned down to 12.0.x too. That is the regression reported in #142.
+    </description>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release>
+        <stubborn-contract.version>0.2.0</stubborn-contract.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+              Imported ahead of spring-boot-dependencies (which the parent contributes), so
+              every version this BOM manages wins over Boot's choice.
+            -->
+            <dependency>
+                <groupId>sh.stubborn</groupId>
+                <artifactId>stubborn-contract-dependencies</artifactId>
+                <version>${stubborn-contract.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>sh.stubborn</groupId>
+            <artifactId>stubborn-contract-starter-stub-runner</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

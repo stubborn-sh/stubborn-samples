@@ -45,9 +45,12 @@
         </dependency>
         <!--
           The stub runner, with its unshaded WireMock swapped for the shaded build.
-          wiremock-jetty12 puts jetty-ee10 12.0.x on the application classpath; the shaded
-          wiremock-standalone keeps its Jetty relocated under wiremock.org.eclipse.jetty,
-          so nothing is shared with whatever Jetty the framework manages.
+          wiremock-jetty12 puts jetty-ee10 12.0.x on the application classpath, a minor line
+          below the 12.1.x core Boot manages, and the stub server dies on the mismatch. The
+          shaded wiremock-standalone keeps its Jetty relocated under
+          wiremock.org.eclipse.jetty, so nothing is shared with whatever Jetty the framework
+          manages. Aligning ee10 with Boot's Jetty instead is the lighter fix and keeps the
+          response-template helpers working - see sample-jetty-alignment.
         -->
         <dependency>
             <groupId>sh.stubborn</groupId>
