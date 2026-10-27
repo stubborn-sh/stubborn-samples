@@ -19,11 +19,18 @@
 
             NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
 
-        A version pin cannot fix that: ee10 has no release compatible with core 12.1, and
-        pinning core down to 12.0.x is what broke spring-boot-starter-jetty applications in
-        the first place. The fix is to stop sharing a Jetty at all — wiremock-standalone is
-        shaded, carrying its Jetty relocated under wiremock.org.eclipse.jetty, so the
-        application and the stub server each get their own and cannot collide.
+        Pinning the core down to 12.0.x is NOT the fix - that is what broke
+        spring-boot-starter-jetty applications in the first place. The fix is to align ee10
+        with the Jetty Boot already manages: 12.1.x publishes ee10 and wiremock-jetty12 runs
+        on it perfectly well. boot-jetty below does that by hand for now, and from Stubborn
+        0.2.1 the BOM does it for you. sample-jetty-alignment lays the combinations out
+        side by side.
+
+        The other way out is to stop sharing a Jetty at all - wiremock-standalone is shaded,
+        carrying its Jetty relocated under wiremock.org.eclipse.jetty. It works, but the same
+        shading relocates Handlebars, so Stubborn's response-template helpers cannot be
+        registered against it. Prefer alignment unless you specifically want a stub server
+        that nothing on the application classpath can perturb.
 
         Each module below asserts both halves: the application's own Jetty is whatever its
         framework manages, AND a stub server boots and serves a request on the same JVM.

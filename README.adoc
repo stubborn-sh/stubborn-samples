@@ -30,6 +30,9 @@ toc::[]
 |link:sample-classpath-matrix[sample-classpath-matrix]
 |Stub server boots under Boot 4.1 (Tomcat + Jetty), Quarkus and plain JUnit
 
+|link:sample-jetty-alignment[sample-jetty-alignment]
+|Four Jetty/ee10 combinations on Boot 4.1 side by side — which break, which work, and why (gh-142)
+
 |link:sample-rest-assured[sample-rest-assured]
 |REST-Assured mode — explicit HTTP calls in generated tests
 

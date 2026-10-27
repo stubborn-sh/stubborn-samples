@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.2</version>
+        <relativePath/>
+    </parent>
+    <groupId>com.example</groupId>
+    <artifactId>jetty-alignment-b-bom-only</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>Jetty Alignment — b) Stubborn's BOM and nothing else</name>
+    <description>
+        Stubborn's BOM on its own: no ee10 import, no shading, no exclusions. The pom a user
+        writes when they just want the stub runner, and the one that has to work.
+
+        Which Stubborn version is pinned here decides what this module demonstrates, and
+        scripts/set-samples-version.sh rewrites that on every release:
+
+          0.2.0 and earlier — the BOM pinned every Jetty artifact to 12.0.x. ee10 and the
+            core agree, so the stub server runs, but the pin outranks Boot and moves the
+            application's Jetty too. Boot's own ee11 layer was never mentioned by the BOM,
+            so it stays at 12.1.x on top of a 12.0.x core and the application stops
+            starting. See BomPinsJettyDownTest.
+
+          0.2.1 and later — the BOM manages only ee10, at the version Boot already uses for
+            the core. Both halves work and the response-template helpers render. See
+            BomAlignedWithBootTest.
+
+        Exactly one of those two test classes runs; the other is skipped. So this module is
+        green before and after the fix, and the day the 0.2.1 bump lands it starts proving
+        the fix instead of the bug — without the pom changing.
+    </description>
+
+    <properties>
+        <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release>
+        <stubborn-contract.version>0.2.1-SNAPSHOT</stubborn-contract.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+              Imported ahead of spring-boot-dependencies (which the parent contributes), so
+              every version this BOM manages wins over Boot's choice.
+            -->
+            <dependency>
+                <groupId>sh.stubborn</groupId>
+                <artifactId>stubborn-contract-dependencies</artifactId>
+                <version>${stubborn-contract.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-tomcat</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jetty</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>sh.stubborn</groupId>
+            <artifactId>stubborn-contract-starter-stub-runner</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <systemPropertyVariables>
+                        <!--
+                          Boot's own Jetty, so the tests can tell "the BOM left the core
+                          alone" from "the BOM pinned the core somewhere else" without
+                          hardcoding a version that goes stale when Boot moves.
+                        -->
+                        <boot.jetty.version>${jetty.version}</boot.jetty.version>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+    <!--
+      stubborn-contract is pinned to a SNAPSHOT here while the gh-142 fix rides to a
+      release; scripts/set-samples-version.sh rewrites it to 0.2.1 when 0.2.1 ships.
+      Releases are disabled for this repository, so a released version still comes from
+      Central and never consults it.
+    -->
+    <repositories>
+        <repository>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+    </repositories>
+</project>

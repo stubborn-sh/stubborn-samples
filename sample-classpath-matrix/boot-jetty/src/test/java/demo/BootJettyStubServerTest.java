@@ -11,6 +11,7 @@ import java.net.http.HttpResponse;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
+import static com.github.tomakehurst.wiremock.client.WireMock.post;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -53,5 +54,43 @@ class BootJettyStubServerTest {
         // something has pinned Jetty back down -- which is what used to break
         // spring-boot-starter-jetty applications.
         assertThat(version).startsWith("12.1.");
+    }
+
+    @Test
+    @DisplayName("and the stub server shares it: ee10 is on the same Jetty, not a line below")
+    void stubServerSharesTheApplicationsJetty() throws Exception {
+        Class<?> handler = Class.forName("org.eclipse.jetty.ee10.servlet.ServletContextHandler", false,
+                getClass().getClassLoader());
+
+        assertThat(handler.getPackage().getImplementationVersion())
+                .isEqualTo(org.eclipse.jetty.server.Server.class.getPackage().getImplementationVersion());
+    }
+
+    @Test
+    @DisplayName("Stubborn's response-template helpers render, which the shaded WireMock could not do")
+    void stubbornTemplateHelpersRender() throws Exception {
+        // The reason this module runs the ordinary WireMock rather than wiremock-standalone:
+        // shading relocates Handlebars too, and these helpers cannot then be registered.
+        WireMockServer server = new WireMockServer(options().dynamicPort()
+                .extensions(new sh.stubborn.contract.verifier.dsl.wiremock.DefaultResponseTransformer()));
+        server.start();
+        try {
+            server.stubFor(post(urlEqualTo("/echo")).willReturn(aResponse().withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody("{\"name\":\"{{jsonpath request.body '$.name'}}\"}")
+                    .withTransformers("response-template")));
+
+            HttpResponse<String> response = HttpClient.newHttpClient().send(
+                    HttpRequest.newBuilder(URI.create("http://localhost:" + server.port() + "/echo"))
+                            .header("Content-Type", "application/json")
+                            .POST(HttpRequest.BodyPublishers.ofString("{\"name\":\"stubborn\"}"))
+                            .build(),
+                    HttpResponse.BodyHandlers.ofString());
+
+            assertThat(response.body()).isEqualTo("{\"name\":\"stubborn\"}");
+        }
+        finally {
+            server.stop();
+        }
     }
 }
