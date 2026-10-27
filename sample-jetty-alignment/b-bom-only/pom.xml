@@ -38,7 +38,7 @@
     <properties>
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
-        <stubborn-contract.version>0.2.0</stubborn-contract.version>
+        <stubborn-contract.version>0.2.1-SNAPSHOT</stubborn-contract.version>
     </properties>
 
     <dependencyManagement>
@@ -104,14 +104,10 @@
     </build>
 
     <!--
-      So that this module can also be pointed at an unreleased Stubborn:
-
-          ./mvnw test -Dstubborn-contract.version=0.2.1-SNAPSHOT
-
-      That is the check that the fix actually works before it ships. It fails while nothing
-      is published under that version, and passes once there is - at which point
-      BomAlignedWithBootTest is the class that runs. Releases are disabled here, so a normal
-      build still resolves 0.2.0 from Central and never consults this repository.
+      stubborn-contract is pinned to a SNAPSHOT here while the gh-142 fix rides to a
+      release; scripts/set-samples-version.sh rewrites it to 0.2.1 when 0.2.1 ships.
+      Releases are disabled for this repository, so a released version still comes from
+      Central and never consults it.
     -->
     <repositories>
         <repository>

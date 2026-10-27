@@ -48,14 +48,15 @@ NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
 |The bug as reported. Nothing complains at build time; the stub server dies on first touch.
 
 |`b-bom-only`
-|depends on the pinned Stubborn
-|depends
-|0.2.0 ✗ / 0.2.1 ✓
+|12.1.x (Boot)
+|12.1.x
+|both ✓ (on 0.2.1)
 |Stubborn's BOM and nothing else — no import, no shading, no exclusions. On 0.2.0 the BOM
- pins all of Jetty to 12.0.x: ee10 and the core agree so the stub server runs, but the pin
- outranks Boot, moves the application's Jetty, and leaves Boot's ee11 layer at 12.1.x on top
- of a 12.0.x core, so the application stops starting. From 0.2.1 the BOM manages only ee10
- and both halves work.
+ pinned all of Jetty to 12.0.x: ee10 and the core agreed so the stub server ran, but the pin
+ outranked Boot, moved the application's Jetty, and left Boot's ee11 layer at 12.1.x on top
+ of a 12.0.x core, so the application stopped starting. From 0.2.1 the BOM manages only ee10
+ and both halves work. This module is pinned to 0.2.1-SNAPSHOT, so that is what it now
+ asserts.
 
 |`c-ee10-aligned`
 |12.1.x (Boot)
@@ -80,19 +81,24 @@ NoSuchMethodError: org.eclipse.jetty.util.component.Environment.ensure(String)
 * From Stubborn *0.2.1* on, Stubborn's BOM manages ee10 at Boot's Jetty line itself and you
   need nothing — `b-bom-only` is then enough on its own.
 
-== The fix, before it ships
+== Which Stubborn this is built against
 
-`b-bom-only` is the module that changes behaviour when the fix lands, so it is also the one
-to point at an unreleased build:
+Every module here is pinned to `0.2.1-SNAPSHOT`, the first version whose BOM manages the
+ee10 layer at Boot's Jetty line, so the sample needs the Central snapshot repository. Each
+module declares it, with releases disabled so a released version still comes from Central.
+`scripts/set-samples-version.sh` rewrites the pin to `0.2.1` when that releases, and the
+sample keeps passing — `b-bom-only` decides which of its two test classes to run from the
+jars on the classpath, not from a version string.
+
+To see the behaviour `0.2.0` shipped instead, point a module back at it:
 
 [source,bash]
 ----
-cd b-bom-only && ../mvnw test -Dstubborn-contract.version=0.2.1-SNAPSHOT
+cd b-bom-only && ../mvnw test -Dstubborn-contract.version=0.2.0
 ----
 
-That fails until a 0.2.1 snapshot is published, and passes once one is — at which point
-`BomAlignedWithBootTest` is the class that runs instead of `BomPinsJettyDownTest`. Nothing
-in the module changes; only which of the two assumptions holds.
+`BomPinsJettyDownTest` then runs in place of `BomAlignedWithBootTest`, and asserts the
+broken state: stub server up, application refusing to start.
 
 Because `scripts/set-samples-version.sh` rewrites `stubborn-contract.version` across every
 sample when a release lands, and the bump PR only merges on green CI, these tests had to be

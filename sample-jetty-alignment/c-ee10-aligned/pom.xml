@@ -19,14 +19,17 @@
         version Boot already uses for the core, closes the gap without overriding anything
         Boot has chosen: the application keeps Boot's Jetty and the stub server works.
 
-        Stubborn's BOM does exactly this from 0.2.1 on, so the jetty-ee10-bom import below
-        is what you need with 0.2.0 and can drop afterwards.
+        Stubborn's BOM does exactly this from 0.2.1 on. This module is pinned to 0.2.1, so
+        the jetty-ee10-bom import below is now redundant - it is kept deliberately, both to
+        show what 0.2.0 required and to prove the two do not fight: the import and the BOM
+        name the same ee10 version, because both follow Boot's ${jetty.version}. On 0.2.0
+        this import is the difference between a working stub runner and a broken one.
     </description>
 
     <properties>
         <java.version>17</java.version>
         <maven.compiler.release>17</maven.compiler.release>
-        <stubborn-contract.version>0.2.0</stubborn-contract.version>
+        <stubborn-contract.version>0.2.1-SNAPSHOT</stubborn-contract.version>
     </properties>
 
     <dependencyManagement>
@@ -74,4 +77,18 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    <!--
+      stubborn-contract is pinned to a SNAPSHOT here while the gh-142 fix rides to a
+      release; scripts/set-samples-version.sh rewrites it to 0.2.1 when 0.2.1 ships.
+      Releases are disabled for this repository, so a released version still comes from
+      Central and never consults it.
+    -->
+    <repositories>
+        <repository>
+            <id>central-snapshots</id>
+            <url>https://central.sonatype.com/repository/maven-snapshots/</url>
+            <snapshots><enabled>true</enabled></snapshots>
+            <releases><enabled>false</enabled></releases>
+        </repository>
+    </repositories>
 </project>

@@ -37,15 +37,21 @@
                                that: on 0.2.0 the BOM pins all of Jetty to 12.0.x and the
                                application stops starting; from 0.2.1 it manages only ee10
                                and both halves work. One of its two test classes runs and
-                               the other is skipped, so it is green either side of the fix
-                               and starts proving it the day the bump lands.
+                               the other is skipped, so it is green either side of the fix.
+                               Now pinned to 0.2.1-SNAPSHOT, so it is the aligned class that
+                               runs and this module is the proof the fix works end to end.
             c-ee10-aligned     ee10 imported at Boot's own Jetty version by hand. Everything
                                lands on one line and both halves work. This is the fix to
-                               apply yourself on 0.2.0; from 0.2.1 Stubborn's BOM does it and
-                               the import can go.
+                               apply yourself on 0.2.0; from 0.2.1 Stubborn's BOM does it, so
+                               the import is redundant and kept only to show what 0.2.0
+                               needed - and to prove it does not clash with the BOM.
             d-shaded-standalone  wiremock-standalone, whose Jetty is relocated. Both halves
                                work, but Stubborn's response-template helpers cannot be
                                registered against it, which is why this is not the answer.
+
+        Every module is pinned to stubborn-contract 0.2.1-SNAPSHOT, which carries the fix,
+        so this sample needs the Central snapshot repository (declared in each module) until
+        0.2.1 is released.
 
         Run `./mvnw clean test` here to see all four.
     </description>
