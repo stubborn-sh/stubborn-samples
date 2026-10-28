@@ -17,7 +17,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>17</maven.compiler.release>
-        <stubborn-contract.version>0.2.0</stubborn-contract.version>
+        <stubborn-contract.version>0.2.1</stubborn-contract.version>
         <wiremock.version>3.13.2</wiremock.version>
         <junit.version>5.11.4</junit.version>
         <assertj.version>3.27.3</assertj.version>
