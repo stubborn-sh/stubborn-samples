@@ -1,0 +1,61 @@
+= Sample: Spring Boot version matrix
+
+Which Spring Boot versions can use Stubborn's stub runner, demonstrated rather than
+claimed. Stubborn is built and tested against Boot 4.1; this answers the Boot 4.0 question.
+
+== Run it
+
+[source,bash]
+----
+./mvnw clean test
+----
+
+== Why Boot 4.0 is not obviously fine
+
+A consumer on Boot 4.0 resolves Stubborn's artifacts against *their* Boot, so both the
+Jetty classpath and Stubborn's autoconfiguration end up in an arrangement nobody exercised
+at build time. Two separate questions follow, and classpath resolution answers neither —
+https://github.com/stubborn-sh/stubborn/issues/142[gh-142] resolved perfectly well and only
+failed when a server started.
+
+**Jetty.** Every Boot 4.0 release manages Jetty on the 12.1 line, the same line as 4.1, so
+there is no repeat of the gh-142 minor-line split. What differs is the patch:
+
+[cols="1,1,1,1",options="header"]
+|===
+|Module |Boot |Core Jetty (Boot) |ee10 (Stubborn's BOM)
+
+|`boot-4-0-earliest` |4.0.0 |12.1.4 |12.1.14
+|`boot-4-0-latest` |4.0.9 |12.1.14 |12.1.14
+|`boot-4-1-latest` |4.1.2 |12.1.14 |12.1.14
+|===
+
+So on the oldest 4.0 the stub server runs an ee10 ten patch releases *ahead* of the core
+beneath it. gh-142 proved a minor-line gap is fatal; whether a patch-level gap matters is
+what `boot-4-0-earliest` exists to find out.
+
+**Autoconfiguration.** The stub-runner starter is compiled against Boot 4.1 and has to
+autoconfigure against 4.0's Spring Boot classes. `StubRunnerAutoConfigurationTest` loads a
+context with `@AutoConfigureStubRunner` on each version, because nothing about Jetty tells
+you whether that works.
+
+== What each module asserts
+
+* Boot's Jetty is on the 12.1 line, and is the version Boot manages
+* the ee10 layer Stubborn supplies shares that minor line
+* the application starts on Jetty and serves
+* the stub server starts and serves in the same JVM
+* Stubborn's response-template helpers render
+* the stub-runner autoconfiguration loads
+
+`boot-4-1-latest` is the control row. If a 4.0 module fails and it passes, the failure is
+about the Boot version; if it fails too, the problem is not version-specific.
+
+== The result
+
+All three pass, and **no module configures Jetty**. From Stubborn 0.2.1 a consumer writes
+no `jetty-ee10-bom` import and no `org.eclipse.jetty` exclusion, on Boot 4.0 or 4.1 — the
+BOM manages the ee10 layer Boot leaves unmanaged and leaves everything else to Boot.
+
+See link:../sample-jetty-alignment[sample-jetty-alignment] for what happens on 4.1 when
+that is got wrong.

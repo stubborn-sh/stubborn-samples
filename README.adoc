@@ -33,6 +33,9 @@ toc::[]
 |link:sample-jetty-alignment[sample-jetty-alignment]
 |Four Jetty/ee10 combinations on Boot 4.1 side by side — which break, which work, and why (gh-142)
 
+|link:sample-boot-version-matrix[sample-boot-version-matrix]
+|Stub runner on Spring Boot 4.0 and 4.1 — Jetty alignment and autoconfiguration across Boot versions
+
 |link:sample-rest-assured[sample-rest-assured]
 |REST-Assured mode — explicit HTTP calls in generated tests
 
