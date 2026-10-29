@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <stubborn-contract.version>0.2.1</stubborn-contract.version>
+        <stubborn-contract.version>0.2.2-SNAPSHOT</stubborn-contract.version>
     </properties>
 
     <dependencyManagement>
@@ -48,15 +48,13 @@
             so this sample needs the spring-web-test-client module rather than rest-assured
             core (which it still gets transitively).
 
-            The version is explicit only because stubborn-contract 0.2.1 managed just
-            rest-assured core in its BOM. From 0.2.2 the BOM manages all three REST Assured
-            modules (stubborn-sh/stubborn#147), so once this sample is pinned to 0.2.2 the
-            <version> here can be deleted.
+            No <version>: the stubborn-contract-dependencies BOM imported above manages every
+            REST Assured module a generated test can be compiled against
+            (stubborn-sh/stubborn#147).
         -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>spring-web-test-client</artifactId>
-            <version>6.2.0</version>
             <scope>test</scope>
         </dependency>
         <dependency>
