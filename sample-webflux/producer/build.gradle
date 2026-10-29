@@ -19,11 +19,15 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'sh.stubborn:stubborn-contract-starter-verifier:0.2.1'
+    // WEBTESTCLIENT generates tests against io.restassured.module.webtestclient. The
+    // version is explicit only because 0.2.1's BOM managed rest-assured core alone; from
+    // 0.2.2 it manages this module too (stubborn-sh/stubborn#147).
+    testImplementation 'io.rest-assured:spring-web-test-client:6.2.0'
 }
 
 contracts {
     testFramework = 'JUNIT5'
-    testMode = 'EXPLICIT'
+    testMode = 'WEBTESTCLIENT'
     packageWithBaseClasses = 'com.example'
     contractsDslDir = file("${project.projectDir}/src/test/resources/contracts")
 }
