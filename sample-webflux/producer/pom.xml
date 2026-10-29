@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>17</java.version>
-        <stubborn-contract.version>0.2.1</stubborn-contract.version>
+        <stubborn-contract.version>0.2.2-SNAPSHOT</stubborn-contract.version>
     </properties>
 
     <dependencyManagement>
@@ -43,9 +43,18 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--
+            WEBTESTCLIENT mode generates tests against io.restassured.module.webtestclient,
+            so this sample needs the spring-web-test-client module rather than rest-assured
+            core (which it still gets transitively).
+
+            No <version>: the stubborn-contract-dependencies BOM imported above manages every
+            REST Assured module a generated test can be compiled against
+            (stubborn-sh/stubborn#147).
+        -->
         <dependency>
             <groupId>io.rest-assured</groupId>
-            <artifactId>rest-assured</artifactId>
+            <artifactId>spring-web-test-client</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -69,7 +78,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <testFramework>JUNIT5</testFramework>
-                    <testMode>EXPLICIT</testMode>
+                    <testMode>WEBTESTCLIENT</testMode>
                     <packageWithBaseClasses>com.example</packageWithBaseClasses>
                 </configuration>
             </plugin>
