@@ -26,3 +26,7 @@ dependencies {
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation "sh.stubborn:stubborn-contract-wiremock-spring:0.2.1"
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

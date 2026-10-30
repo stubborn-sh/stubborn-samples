@@ -25,3 +25,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'sh.stubborn:stubborn-contract-wiremock:0.2.1'
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

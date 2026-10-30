@@ -32,3 +32,7 @@ contracts {
     packageWithBaseClasses = 'com.example'
     contractsDslDir = file("${project.projectDir}/src/test/resources/contracts")
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

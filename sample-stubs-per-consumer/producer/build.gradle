@@ -29,3 +29,7 @@ contracts {
         baseClassMapping('.*beer.*', 'com.example.BeerBase')
     }
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

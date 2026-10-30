@@ -20,3 +20,7 @@ dependencies {
     testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.1'
     testImplementation 'io.rest-assured:rest-assured:6.0.0'
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

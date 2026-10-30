@@ -39,3 +39,7 @@ protobuf {
         all()*.plugins { grpc {} }
     }
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
