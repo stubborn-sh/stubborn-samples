@@ -22,14 +22,14 @@ repositories {
 // catch it.
 dependencyManagement {
     imports {
-        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.1"
+        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.2"
     }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.2-SNAPSHOT'
+    testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.2'
 }
 
 tasks.named('test') {

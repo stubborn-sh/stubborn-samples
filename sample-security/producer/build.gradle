@@ -1,7 +1,7 @@
 plugins {
     id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'sh.stubborn.contract' version '0.2.1'
+    id 'sh.stubborn.contract' version '0.2.2'
     id 'java'
     id 'maven-publish'
 }
@@ -20,7 +20,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'sh.stubborn:stubborn-contract-starter-verifier:0.2.1'
+    testImplementation 'sh.stubborn:stubborn-contract-starter-verifier:0.2.2'
     testImplementation 'io.rest-assured:rest-assured:6.0.0'
 }
 

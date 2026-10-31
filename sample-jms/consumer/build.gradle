@@ -22,7 +22,7 @@ repositories {
 // catch it.
 dependencyManagement {
     imports {
-        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.1"
+        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.2"
     }
 }
 
@@ -34,7 +34,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-artemis-test'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.1'
+    testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.2'
     testImplementation 'org.apache.activemq:artemis-jakarta-server:2.40.0'
 }
 
