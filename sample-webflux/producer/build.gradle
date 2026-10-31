@@ -1,8 +1,9 @@
 plugins {
     id 'org.springframework.boot' version '4.1.0'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'sh.stubborn.contract' version '0.2.2-SNAPSHOT'
+    id 'sh.stubborn.contract' version '0.2.2'
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'com.example'
@@ -17,14 +18,14 @@ repositories {
 
 dependencyManagement {
     imports {
-        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.2-SNAPSHOT"
+        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.2"
     }
 }
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'sh.stubborn:stubborn-contract-starter-verifier:0.2.2-SNAPSHOT'
+    testImplementation 'sh.stubborn:stubborn-contract-starter-verifier:0.2.2'
     // WEBTESTCLIENT generates tests against io.restassured.module.webtestclient. No
     // version: the BOM imported above manages every REST Assured module a generated test
     // can be compiled against (stubborn-sh/stubborn#147).
@@ -36,4 +37,25 @@ contracts {
     testMode = 'WEBTESTCLIENT'
     packageWithBaseClasses = 'com.example'
     contractsDslDir = file("${project.projectDir}/src/test/resources/contracts")
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// The consumer resolves com.example:beer-api-producer-webflux:+:stubs from the local Maven
+// repository (stubsMode LOCAL). `mvn install` puts the stubs JAR there for the Maven leg;
+// `gradle build` installs nothing, so publish it here too. The artifactId is explicit because
+// Gradle names this project after its directory, not after the artifact the contract names.
+publishing {
+    publications {
+        stubs(MavenPublication) {
+            artifactId = 'beer-api-producer-webflux'
+            artifact tasks.named('verifierStubsJar')
+        }
+    }
+}
+
+tasks.named('build') {
+    finalizedBy 'publishToMavenLocal'
 }
