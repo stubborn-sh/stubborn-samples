@@ -20,6 +20,18 @@ ext {
     protobufVersion = '4.30.2'
 }
 
+// Aligns org.eclipse.jetty.ee10 with the Jetty core Boot manages. Boot imports jetty-bom and
+// jetty-ee11-bom but not ee10, the servlet layer wiremock-jetty12 is built against; left
+// unmanaged it resolves to 12.0.x under Boot's 12.1.x core and the stub server dies with
+// NoSuchMethodError on Environment.ensure (stubborn-sh/stubborn#142). The Maven side of each
+// sample has always imported this BOM; the Gradle side did not, and no consumer test ran to
+// catch it.
+dependencyManagement {
+    imports {
+        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.1"
+    }
+}
+
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-grpc-client'
     implementation "io.grpc:grpc-protobuf:${grpcVersion}"

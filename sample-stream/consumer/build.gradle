@@ -24,6 +24,8 @@ dependencies {
 dependencyManagement {
     imports {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:2025.1.2"
+        // Jetty ee10 alignment — see stubborn-sh/stubborn#142
+        mavenBom "sh.stubborn:stubborn-contract-dependencies:0.2.1"
     }
 }
 

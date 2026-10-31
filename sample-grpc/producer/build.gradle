@@ -4,6 +4,7 @@ plugins {
     id 'sh.stubborn.contract' version '0.2.1'
     id 'com.google.protobuf' version '0.9.4'
     id 'java'
+    id 'maven-publish'
 }
 
 group = 'com.example'
@@ -54,4 +55,21 @@ contracts {
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+// The consumer resolves com.example:beer-api-producer-grpc:+:stubs from the local Maven
+// repository (stubsMode LOCAL). `mvn install` puts the stubs JAR there for the Maven leg;
+// `gradle build` installs nothing, so publish it here too. The artifactId is explicit because
+// Gradle names this project after its directory, not after the artifact the contract names.
+publishing {
+    publications {
+        stubs(MavenPublication) {
+            artifactId = 'beer-api-producer-grpc'
+            artifact tasks.named('verifierStubsJar')
+        }
+    }
+}
+
+tasks.named('build') {
+    finalizedBy 'publishToMavenLocal'
 }
