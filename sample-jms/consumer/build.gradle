@@ -28,6 +28,10 @@ dependencyManagement {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-artemis'
+    // Mirrors this consumer's Maven POM. Missing here until the Gradle tests were
+    // switched on, which is why nothing reported it.
+    testImplementation 'org.awaitility:awaitility'
+    testImplementation 'org.springframework.boot:spring-boot-starter-artemis-test'
     implementation 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.1'

@@ -28,9 +28,13 @@ dependencyManagement {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    // Mirrors this consumer's Maven POM. Missing here until the Gradle tests were
+    // switched on, which is why nothing reported it.
+    implementation 'org.springframework.boot:spring-boot-restclient'
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'sh.stubborn:stubborn-contract-starter-stub-runner:0.2.1'
-    testImplementation 'io.rest-assured:rest-assured:6.0.0'
+    testImplementation 'io.rest-assured:rest-assured'
 }
 
 tasks.named('test') {
